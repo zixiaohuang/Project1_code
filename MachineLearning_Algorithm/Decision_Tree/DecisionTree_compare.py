@@ -5,19 +5,19 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report,confusion_matrix
 
 if __name__ == '__main__':
-    with open('E:\\VgIndex2.py\\数据\\pca_data', 'rb') as f1:
+    with open('E:\\Project1_code\\Datasets\\pca_data', 'rb') as f1:
         pca_data = pickle.load(f1)
     pca_data=pca_data.sample(n=50000,axis=0)
 
-    with open('E:\\VgIndex2.py\\数据\\auto_code', 'rb') as f2:
+    with open('E:\\Project1_code\\Datasets\\auto_code', 'rb') as f2:
         code_data = pickle.load(f2)
     code_data = code_data.sample(n=50000,axis=0)
 
-    with open('E:\\VgIndex2.py\\数据\\pca_original', 'rb') as f4:
+    with open('E:\\Project1_code\\Datasets\\pca_original', 'rb') as f4:
         pcaori_data = pickle.load(f4)
     pcaori_data = pcaori_data.sample(n=50000,axis=0)
 
-    with open('E:\\VgIndex2.py\\数据\\code_original', 'rb') as f3:
+    with open('E:\\Project1_code\\Datasets\\code_original', 'rb') as f3:
         codeori_data = pickle.load(f3)
     codeori_data = codeori_data.sample(n=50000,axis=0)
 
@@ -39,5 +39,5 @@ if __name__ == '__main__':
             clf.fit(X_train, y_train)
             y_pred = clf.predict(X_test)
             print(confusion_matrix(y_test, y_pred))
-            print(classification_report(y_test, y_pred))
+            print(classification_report(y_test, y_pred,digits=4))
             print("{0} 循环一次时间:{1}".format(titles[j], time.time() - begin))

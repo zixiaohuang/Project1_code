@@ -66,8 +66,8 @@ if __name__ == "__main__":
     print("3,time:{}".format(time.time()-time1))
     # result1=result.loc[result['label']==1]
     # result2=result.loc[result['label']==-1]
-    ax.scatter(X_new[y_test==1][:,0],X_new[y_test==1][:,1],X_new[y_test==1][:,2],c='g',s=10,marker='o')
-    ax.scatter(X_new[y_test==-1][:,0], X_new[y_test==-1][:,1], X_new[y_test==-1][:,2], c='r', s=10,marker='^')
+    ax.scatter(X_new[y_test==1][:,0],X_new[y_test==1][:,1],X_new[y_test==1][:,2],c='g',s=10,marker='o')#绿色代表健康
+    ax.scatter(X_new[y_test==-1][:,0], X_new[y_test==-1][:,1], X_new[y_test==-1][:,2], c='r', s=10,marker='^')#红色代表有病
 
     ax.set_zlabel('feature3')  # 坐标轴
     ax.set_ylabel('feature2')

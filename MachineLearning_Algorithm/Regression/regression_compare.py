@@ -9,24 +9,24 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import classification_report,confusion_matrix
 
 if __name__ == '__main__':
-    with open('E:\\VgIndex2.py\\数据\\pca_data', 'rb') as f1:
+    with open('E:\\Project1_code\\Datasets\\pca_data', 'rb') as f1:
         pca_data = pickle.load(f1)
     pca_data=pca_data.sample(n=50000,axis=0)
 
-    with open('E:\\VgIndex2.py\\数据\\auto_code', 'rb') as f2:
+    with open('E:\\Project1_code\\Datasets\\auto_code', 'rb') as f2:
         code_data = pickle.load(f2)
     code_data = code_data.sample(n=50000,axis=0)
 
-    with open('E:\\VgIndex2.py\\数据\\code_original', 'rb') as f3:
-        codeori_data = pickle.load(f3)
-    codeori_data = codeori_data.sample(n=50000,axis=0)
-
-    with open('E:\\VgIndex2.py\\数据\\pca_original', 'rb') as f4:
+    with open('E:\\Project1_code\\Datasets\\pca_original', 'rb') as f4:
         pcaori_data = pickle.load(f4)
     pcaori_data = pcaori_data.sample(n=50000,axis=0)
 
-    datas = [pca_data,code_data,codeori_data,pcaori_data]
-    data_title = ['pca_data','code_data','code_originaldata','pca_originaldata']
+    with open('E:\\Project1_code\\Datasets\\code_original', 'rb') as f3:
+        codeori_data = pickle.load(f3)
+    codeori_data = codeori_data.sample(n=50000,axis=0)
+
+    datas = [pca_data,code_data,pcaori_data,codeori_data]
+    data_title = ['pca_data','code_data','pca_originaldata','code_originaldata']
 
     for data,i in zip(datas,range(len(datas))):
         print("{} datas start predict".format(data_title[i]))
@@ -51,7 +51,7 @@ if __name__ == '__main__':
             y_pred = model.predict(X_test)
             print("{}模型训练结果,花费时间{}".format(name, time.time() - start))
             print(confusion_matrix(y_test, y_pred))
-            print(classification_report(y_test, y_pred))
+            print(classification_report(y_test, y_pred,digits=4))
             fpr, tpr, thresholds = metrics.roc_curve(y_test, y_pred)
             auc = metrics.auc(fpr, tpr)
         for i in range(len(results)):

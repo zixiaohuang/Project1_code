@@ -1,15 +1,11 @@
 '''
-比较优化后集成学习不同算法的准确率
+用优化参数后的MLP对比不同数据
 '''
-import pickle
+
 import time
-import math
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from xgboost.sklearn import XGBClassifier
-from sklearn.ensemble import RandomForestClassifier
+import pickle
 from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report,confusion_matrix
 
 if __name__ == '__main__':
@@ -29,6 +25,7 @@ if __name__ == '__main__':
         codeori_data = pickle.load(f3)
     codeori_data = codeori_data.sample(n=50000,axis=0)
 
+
     datas = [pca_data,code_data,pcaori_data,codeori_data]
     data_title = ['pca_data','code_data','pca_originaldata','code_originaldata']
 
@@ -39,14 +36,10 @@ if __name__ == '__main__':
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
         # 定义函数
-        clf_adaboost = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(criterion='gini',max_depth=11,min_impurity_decrease=0.0,min_samples_leaf=1,min_samples_split=20),
-                                          algorithm='SAMME.R',random_state=42,learning_rate=0.8,n_estimators=170)
-        clf_xgboost = XGBClassifier(booster='gbtree', nthread=-1,n_jobs=-1,objective='binary:logistic',learning_rate=0.05, gamma=0.1,
-                                    max_depth=8,reg_lambda= 1,subsample=0.8,colsample_bytree=1.0,min_child_weight=3,seed=1000)
-        clf_rf = RandomForestClassifier(n_estimators=80,max_depth=17,min_samples_split=50,min_samples_leaf=10,max_features=None,
-                              random_state=42,oob_score=True,n_jobs=-1)
-        clfs=[clf_adaboost,clf_xgboost,clf_rf]
-        titles = ['AdaBoost','XgBoost', 'RandomForest']
+        clf = MLPClassifier(solver='adam', hidden_layer_sizes=(64, 64, 8), learning_rate='adaptive', random_state=42,
+                            alpha=1e-4, verbose=False)
+        clfs=[clf]
+        titles = ["MultiPerceptron"]
 
         for clf,j in zip(clfs,range(len(clfs))):
             begin =time.time()
