@@ -5,24 +5,28 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report,confusion_matrix
 
 if __name__ == '__main__':
-    with open('E:\\Project1_code\\Datasets\\pca_data', 'rb') as f1:
-        pca_data = pickle.load(f1)
+    with open('E:\\Project1_code\\Datasets\\all_originaldata', 'rb') as f1:
+        original_data = pickle.load(f1)
+    original_data=original_data.sample(n=50000,axis=0)
+
+    with open('E:\\Project1_code\\Datasets\\pca_data', 'rb') as f2:
+        pca_data = pickle.load(f2)
     pca_data=pca_data.sample(n=50000,axis=0)
 
-    with open('E:\\Project1_code\\Datasets\\auto_code', 'rb') as f2:
-        code_data = pickle.load(f2)
+    with open('E:\\Project1_code\\Datasets\\auto_code', 'rb') as f3:
+        code_data = pickle.load(f3)
     code_data = code_data.sample(n=50000,axis=0)
 
     with open('E:\\Project1_code\\Datasets\\pca_original', 'rb') as f4:
         pcaori_data = pickle.load(f4)
     pcaori_data = pcaori_data.sample(n=50000,axis=0)
 
-    with open('E:\\Project1_code\\Datasets\\code_original', 'rb') as f3:
-        codeori_data = pickle.load(f3)
+    with open('E:\\Project1_code\\Datasets\\code_original', 'rb') as f5:
+        codeori_data = pickle.load(f5)
     codeori_data = codeori_data.sample(n=50000,axis=0)
 
-    datas = [pca_data,code_data,pcaori_data, codeori_data]
-    data_title = ['pca_data','code_data','pca_originaldata','code_originaldata']
+    datas = [original_data,pca_data,code_data,pcaori_data, codeori_data]
+    data_title = ['original_data','pca_data','code_data','pca_originaldata','code_originaldata']
 
     for data,i in zip(datas,range(len(datas))):
         print("{} datas start predict".format(data_title[i]))

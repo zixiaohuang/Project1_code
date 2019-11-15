@@ -2,17 +2,12 @@
 优化模型参数——svm多项式核函数对比参数
 '''
 import pickle
-import pandas as pd
 import numpy as np
 import time
 import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 from sklearn.model_selection import learning_curve
 from sklearn.model_selection import ShuffleSplit
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.pipeline import Pipeline
 
 # train_sizes=np.linspace(.1,1.0,5)表示把训练样本数量从0.1~1分成五等分，生成[0.1,0.325,0.55,0.775,1]
 def plot_learning_curve(estimator,title,X,y,ylim=None,cv=None,n_jobs=1,train_sizes=np.linspace(.1,1.0,5)):
@@ -37,13 +32,6 @@ def plot_learning_curve(estimator,title,X,y,ylim=None,cv=None,n_jobs=1,train_siz
     print("plot end")
     return plt
 
-def std_PCA(**argv):
-    scaler = StandardScaler()
-    pca = PCA(**argv)
-    pipeline = Pipeline([('scaler',scaler),
-                         ('pca',pca)])
-    return pipeline
-
 if __name__ == "__main__":
     # 读取数据
     '''
@@ -54,20 +42,16 @@ if __name__ == "__main__":
     with open("all_data", 'wb') as f:
         pickle.dump(all_data, f)
     '''
-    with open("all_data", 'rb') as f:
+    with open("E:\\modifiedversion\\Datasets\\all_original_pca_auto_shuffle_tune", 'rb') as f:
         all_data = pickle.load(f)
 
-    all_dataselect = all_data.drop(labels=['simple_rat_index','soil_reg_veg_index','sr','nri','tpvi','green_red_ndvi'],axis=1).sample(n=15000,axis=0)
+    all_dataselect = all_data.sample(n=50000,axis=0)
     y = np.array(all_dataselect['label']).ravel()
     X = all_dataselect.drop('label', axis=1)
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.99, random_state=42)  # 选部分样本进行计算
-    pca = std_PCA(n_components=6)
     cv = ShuffleSplit(n_splits=5,test_size= 0.2, random_state=0)
     title = 'Learning Curves with degree={0}'
     degrees = [1,2,3]
-    # degrees = [1, 2]
-    # degrees = [1]
-    X_pca=pca.fit_transform(X)
 
     start = time.clock()
     plt.figure(figsize=(12,4),dpi=144)
@@ -79,7 +63,7 @@ if __name__ == "__main__":
         plt.subplot(1,len(degrees),i+1)
         plot_learning_curve(SVC(C=1.0, kernel='poly',degree=degrees[i],gamma='auto',shrinking=True),
                             title.format(degrees[i]),
-                            X_pca,y,ylim=(0.7,0.90),cv=cv,n_jobs=-1)
+                            X,y,ylim=(0.8,1.01),cv=cv,n_jobs=-1)
         print('第{}项式svm循环一次的时间'.format(i+1),time.time()-begin)
     plt.savefig("E://txt.png")
     plt.show()

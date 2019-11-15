@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
+import pickle
 
 # train_sizes=np.linspace(.1,1.0,5)表示把训练样本数量从0.1~1分成五等分，生成[0.1,0.325,0.55,0.775,1]
 def plot_param_curve(plt, train_sizes, cv_results, xlabel):
@@ -36,21 +37,15 @@ def plot_param_curve(plt, train_sizes, cv_results, xlabel):
 
 
 if __name__ == "__main__":
-    # 读取数据
-    all_data = pd.read_table("E:\\combinate_newdata\\all_index.txt", sep=" ",
-                             names=['normalizeddiff_veg_index', 'simple_rat_index', 'diff_veg_index',
-                                    'soil_reg_veg_index', 'sr', 'nri', 'tpvi', 'norm_red', 'norm_nir',
-                                    'norm_green', 'cvi', 'green_red_ndvi', 'label'])
-
-    all_dataselect = all_data.drop(
-        labels=['simple_rat_index', 'soil_reg_veg_index', 'sr', 'nri', 'tpvi', 'green_red_ndvi'], axis=1)
+    with open("E:\\modifiedversion\\Datasets\\all_original_pca_auto_shuffle_tune",'rb') as f:
+        all_data = pickle.load(f)
     y = np.array(all_data['label']).ravel()
     X = all_data.drop('label', axis=1)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.997, random_state = 42) # 选部分样本进行计算
     gammas = np.linspace(0, 0.1,20)
     clf_C = np.linspace(0.01, 10, 20)
     param_grid = {'C':clf_C,'gamma':gammas,'kernel':['rbf']}
-    clf = GridSearchCV(SVC(), param_grid, cv=5,n_jobs=8)
+    clf = GridSearchCV(SVC(), param_grid, cv=5,n_jobs=-1)
     clf.fit(X_train,y_train)
     print("best param: {0}\n best score: {1}".format(clf.best_params_,clf.best_score_))
     #plt.figure(figsize=(10,4),dpi=144)
