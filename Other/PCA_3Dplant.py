@@ -22,13 +22,16 @@ def std_PCA():
                          ('pca',pca)])
     return pipeline
 
+def rotate(angle):
+    ax.view_init(azim=angle)
+
 if __name__ == "__main__":
     time1 = time.time()
     # all_data = pd.read_table("E:\\combinate_newdata\\all_index.txt", sep=" ",
     #                          names=['normalizeddiff_veg_index', 'simple_rat_index', 'diff_veg_index',
     #                                 'soil_reg_veg_index', 'sr', 'nri', 'tpvi', 'norm_red', 'norm_nir',
     #                                 'norm_green', 'cvi', 'green_red_ndvi', 'label'])
-    with open('E:\\VgIndex2.py\\预处理\\new_alldata', 'rb') as f:
+    with open('E:\\Project1_code\\Datasets\\new_alldata', 'rb') as f:
         data = pickle.load(f)
     # all_dataselect = all_data.drop(
     #     labels=['simple_rat_index', 'soil_reg_veg_index', 'sr', 'nri', 'tpvi', 'green_red_ndvi'], axis=1).sample(
@@ -73,3 +76,4 @@ if __name__ == "__main__":
     ax.set_ylabel('feature2')
     ax.set_xlabel('feature1')
     plt.show()
+
